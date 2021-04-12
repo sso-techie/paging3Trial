@@ -17,26 +17,28 @@ class GalleryImageLoader(private val contentResolver: ContentResolver) {
             ), null, null, "${MediaStore.Images.Media.DATE_ADDED} DESC LIMIT $limit OFFSET $offset"
         )?.use {
             val list = arrayListOf<ImageData>()
-            do {
-                var columnIndex = it.getColumnIndex(MediaStore.Images.Media._ID)
-                val uri = if (columnIndex != -1) {
-                    ContentUris.withAppendedId(queryUri, it.getLong(columnIndex))
-                } else null
+            if (it.count > 0) {
+                do {
+                    var columnIndex = it.getColumnIndex(MediaStore.Images.Media._ID)
+                    val uri = if (columnIndex != -1) {
+                        ContentUris.withAppendedId(queryUri, it.getLong(columnIndex))
+                    } else null
 
-                if (uri != null) {
-                    columnIndex = it.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
-                    val name = if (columnIndex != -1) {
-                        it.getString(columnIndex)
-                    } else ""
+                    if (uri != null) {
+                        columnIndex = it.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
+                        val name = if (columnIndex != -1) {
+                            it.getString(columnIndex)
+                        } else ""
 
-                    columnIndex = it.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)
-                    val dataAdded = if (columnIndex != -1) {
-                        it.getLong(columnIndex)
-                    } else 0L
+                        columnIndex = it.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)
+                        val dataAdded = if (columnIndex != -1) {
+                            it.getLong(columnIndex)
+                        } else 0L
 
-                    list.add(ImageData(uri, name, dataAdded))
-                }
-            } while (it.moveToNext())
+                        list.add(ImageData(uri, name, dataAdded))
+                    }
+                } while (it.moveToNext())
+            }
             list
         } ?: arrayListOf()
     }

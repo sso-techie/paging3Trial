@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Paging3Trial</string>
+    <string name="title_need_permission">권한이 필요합니다.</string>
+    <string name="message_need_permission">설정에서 권한을 허가해 주세요.</string>
 </resources>
